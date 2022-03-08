@@ -1,6 +1,12 @@
 //React imports
 import React, { useRef, useState, useEffect } from "react";
-import { StyleSheet, Text, View, ActivityIndicator } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  ActivityIndicator,
+  TouchableOpacity,
+} from "react-native";
 
 //module imports
 import MapView, { Marker, UrlTile, Polyline } from "react-native-maps";
@@ -8,6 +14,9 @@ import AnimatedPolyline from "react-native-maps-animated-polyline";
 
 //local imports
 import LocationInput from "./components/LocationInput";
+import RouteInfo from "./components/RouteInfo";
+import { set } from "react-native-reanimated";
+import Button from "./components/Button";
 
 export default function App() {
   // map variables
@@ -40,6 +49,10 @@ export default function App() {
 
   //colours for the poly line component
   const polylineColours = ["#c6282b", "#00b97b", "#303f9f"];
+
+  //var that stores the current active component to display (locationInput, routeInfo, nav)
+  const [locationInputActive, setLocacationInputActive] = useState(true);
+  const [routeInfoActive, setRouteInfoActive] = useState(false);
 
   return (
     <View style={styles.container}>
@@ -76,17 +89,29 @@ export default function App() {
           <ActivityIndicator size="small" />
         </View>
       )}
-      <LocationInput
-        fromLocation={fromLocation}
-        toLocation={toLocation}
-        setFromLocation={setFromLocation}
-        setToLocation={setToLocation}
-        mapRef={mapRef}
-        setRoutes={setRoutes}
-        profile={profile}
-        setProfile={setProfile}
-        setLoading={setLoading}
-      />
+      {locationInputActive && (
+        <LocationInput
+          fromLocation={fromLocation}
+          toLocation={toLocation}
+          setFromLocation={setFromLocation}
+          setToLocation={setToLocation}
+          mapRef={mapRef}
+          setRoutes={setRoutes}
+          profile={profile}
+          setProfile={setProfile}
+          setLoading={setLoading}
+          setLocacationInputActive={setLocacationInputActive}
+          setRouteInfoActive={setRouteInfoActive}
+        />
+      )}
+      {routeInfoActive && (
+        <RouteInfo
+          route={routes[profile]}
+          color={polylineColours[profile]}
+          setLocacationInputActive={setLocacationInputActive}
+          setRouteInfoActive={setRouteInfoActive}
+        />
+      )}
     </View>
   );
 }
@@ -94,14 +119,6 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-  },
-  backBtnParent: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    position: "absolute",
-    top: 50,
-    left: 20,
   },
   loading: {
     flex: 1,

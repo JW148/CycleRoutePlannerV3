@@ -3,7 +3,7 @@ import { StyleSheet, View, TouchableOpacity, Image, Text } from "react-native";
 
 import BottomSheet, { BottomSheetTextInput } from "@gorhom/bottom-sheet";
 import * as Location from "expo-location";
-import { AntDesign, Feather } from "@expo/vector-icons";
+import { AntDesign, MaterialCommunityIcons } from "@expo/vector-icons";
 import { Picker } from "@react-native-picker/picker";
 
 import AutoComplete from "./AutoComplete";
@@ -20,10 +20,12 @@ export default function LocationInput({
   profile,
   setProfile,
   setLoading,
+  setLocacationInputActive,
+  setRouteInfoActive,
 }) {
   // bottomShelf variables
   const bottomSheetRef = useRef(null);
-  const snapPoints = useMemo(() => ["10%", "35%"], []);
+  const snapPoints = useMemo(() => ["10%", "40%"], []);
   // const [snapPoints, setSnapPoints] = useState(["20%"]);
 
   ////////// location input functions ///////////
@@ -58,6 +60,7 @@ export default function LocationInput({
 
   //once to location has been entered, load the routes (listen for change with a useEffect hook on the
   //to location state). (Loads on component first mount even though the state hasn't changed)
+  //*** I think this is what's causing the routes to reload when going back from the routeInfo page
   useEffect(() => {
     if (toLocation.set) {
       setLoading(true);
@@ -116,6 +119,11 @@ export default function LocationInput({
       1000
     );
     setRoutes(null);
+  };
+
+  handleOnPress = () => {
+    setLocacationInputActive(false);
+    setRouteInfoActive(true);
   };
 
   return (
@@ -185,7 +193,6 @@ export default function LocationInput({
         ref={bottomSheetRef}
         backgroundStyle={{ backgroundColor: "#222222", borderRadius: 8 }}
         style={{
-          borderRadius: 5,
           shadowColor: "#000",
           shadowOffset: {
             width: 0,
@@ -234,6 +241,17 @@ export default function LocationInput({
             </View>
           </View>
         </View>
+        <TouchableOpacity
+          style={styles.infoBtn}
+          onPress={handleOnPress}
+          disabled={!toLocation.set}
+        >
+          <MaterialCommunityIcons
+            name="information"
+            size={24}
+            color={toLocation.set ? "#e1e1e1" : "#515151"}
+          />
+        </TouchableOpacity>
       </BottomSheet>
     </>
   );
@@ -287,5 +305,10 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     marginRight: 5,
+  },
+  infoBtn: {
+    position: "absolute",
+    top: 87,
+    right: 25,
   },
 });

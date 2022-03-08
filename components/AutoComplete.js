@@ -39,11 +39,14 @@ export default function AutoComplete({ onPress, placeholder }) {
         color: "#e1e1e1",
         clearButtonMode: "never",
       }}
+      listViewDisplayed={false}
+      nearbyPlacesAPI="GooglePlacesSearch"
       query={{
         key: "AIzaSyCCxlQ9mudTSuOE0FB2PfaxEfdhBXT63vQ", //***************** move this somewhere else ********************************
         language: "en",
         components: "country:uk", //restrict results to uk only
-        types: "geocode",
+        location: "55.9533456, -3.1883749",
+        radius: "500",
       }}
       onPress={(data, details = null) => {
         // 'details' is provided when fetchDetails = true
@@ -54,6 +57,7 @@ export default function AutoComplete({ onPress, placeholder }) {
         onPress(lat, long, address);
       }}
       onFail={(error) => console.error(error)}
+      debounce={200}
     />
   );
 }

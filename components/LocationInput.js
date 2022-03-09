@@ -23,6 +23,7 @@ export default function LocationInput({
   setLocacationInputActive,
   setRouteInfoActive,
   setNav,
+  setMidpoint,
 }) {
   // bottomShelf variables
   const bottomSheetRef = useRef(null);
@@ -42,13 +43,13 @@ export default function LocationInput({
   };
 
   handleToLocation = (lat, long, address) => {
+    let latitude = (lat + fromLocation.latitude) / 2 - 0.005;
+    let longitude = (long + fromLocation.longitude) / 2;
+    let latDelta = Math.abs(lat - fromLocation.latitude) * 2.2;
+    let longDelta = Math.abs(long - fromLocation.longitude) * 1.4;
+
     mapRef.current.animateToRegion(
-      setAnimateTo(
-        (lat + fromLocation.latitude) / 2 - 0.005,
-        (long + fromLocation.longitude) / 2,
-        Math.abs(lat - fromLocation.latitude) * 2.2,
-        Math.abs(long - fromLocation.longitude) * 1.4
-      ),
+      setAnimateTo(latitude, longitude, latDelta, longDelta),
       1000
     );
     setToLocation({
@@ -56,6 +57,12 @@ export default function LocationInput({
       longitude: long,
       address: address,
       set: true,
+    });
+    setMidpoint({
+      latitude: latitude,
+      longitude: longitude,
+      latitudeDelta: latDelta,
+      longitudeDelta: longDelta,
     });
   };
 
@@ -131,7 +138,12 @@ export default function LocationInput({
   };
 
   //
-  startNav = () => {};
+  startNav = () => {
+    console.log("pressed");
+    setLocacationInputActive(false);
+    setRouteInfoActive(false);
+    setNav(true);
+  };
 
   return (
     <>
@@ -244,7 +256,11 @@ export default function LocationInput({
               <Picker.Item label="Quickest" value={2} color="#303f9f" />
             </Picker>
             <View style={styles.btnContainer}>
-              <Button title="Start Route" disabled={toLocation.set} />
+              <Button
+                title="Start Route"
+                disabled={toLocation.set}
+                onPress={startNav}
+              />
             </View>
           </View>
         </View>

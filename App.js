@@ -11,6 +11,7 @@ import {
 //module imports
 import MapView, { Marker, UrlTile, Polyline } from "react-native-maps";
 import AnimatedPolyline from "react-native-maps-animated-polyline";
+import { AntDesign } from "@expo/vector-icons";
 
 //local imports
 import LocationInput from "./components/LocationInput";
@@ -54,6 +55,9 @@ export default function App() {
   //var that stores the current active component to display (locationInput, routeInfo, nav)
   const [locationInputActive, setLocacationInputActive] = useState(true);
   const [routeInfoActive, setRouteInfoActive] = useState(false);
+
+  //var used to store the region of the map to display between the start and end locations
+  const [midpoint, setMidpoint] = useState(null);
 
   return (
     <View style={styles.container}>
@@ -106,6 +110,7 @@ export default function App() {
           setLocacationInputActive={setLocacationInputActive}
           setRouteInfoActive={setRouteInfoActive}
           setNav={setNav}
+          setMidpoint={setMidpoint}
         />
       )}
       {routeInfoActive && (
@@ -115,6 +120,19 @@ export default function App() {
           setLocacationInputActive={setLocacationInputActive}
           setRouteInfoActive={setRouteInfoActive}
         />
+      )}
+      {nav && (
+        <View style={styles.backBtnParent}>
+          <TouchableOpacity
+            onPress={() => {
+              setLocacationInputActive(true);
+              setNav(false);
+              mapRef.current.animateToRegion(midpoint, 1000);
+            }}
+          >
+            <AntDesign name="leftcircleo" size={32} color="#e1e1e1" />
+          </TouchableOpacity>
+        </View>
       )}
     </View>
   );
@@ -134,5 +152,13 @@ const styles = StyleSheet.create({
   locationSearch: {
     flex: 1,
     position: "absolute",
+  },
+  backBtnParent: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    position: "absolute",
+    top: 50,
+    left: 15,
   },
 });

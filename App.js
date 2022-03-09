@@ -39,6 +39,7 @@ export default function App() {
     address: "Enter destination above",
     set: false,
   });
+  const [nav, setNav] = useState(false);
 
   //route vars
   const [routes, setRoutes] = useState(null);
@@ -62,6 +63,8 @@ export default function App() {
         style={styles.container}
         onRegionChangeComplete={(region) => setRegion(region)}
         userInterfaceStyle={"dark"}
+        showsUserLocation={nav}
+        followsUserLocation={nav}
       >
         <Marker
           coordinate={{
@@ -102,6 +105,7 @@ export default function App() {
           setLoading={setLoading}
           setLocacationInputActive={setLocacationInputActive}
           setRouteInfoActive={setRouteInfoActive}
+          setNav={setNav}
         />
       )}
       {routeInfoActive && (

@@ -22,6 +22,7 @@ export default function LocationInput({
   setLoading,
   setLocacationInputActive,
   setRouteInfoActive,
+  setNav,
 }) {
   // bottomShelf variables
   const bottomSheetRef = useRef(null);
@@ -69,9 +70,11 @@ export default function LocationInput({
         .then((route) => {
           setRoutes(route);
           setLoading(false);
+          bottomSheetRef.current.expand();
           console.log("routes loaded!");
         })
         .catch((error) => {
+          setLoading(false);
           console.log(error);
         });
     }
@@ -121,10 +124,14 @@ export default function LocationInput({
     setRoutes(null);
   };
 
+  //handles changing between the different components when the 'i' button is pressed
   handleOnPress = () => {
     setLocacationInputActive(false);
     setRouteInfoActive(true);
   };
+
+  //
+  startNav = () => {};
 
   return (
     <>
@@ -237,7 +244,7 @@ export default function LocationInput({
               <Picker.Item label="Quickest" value={2} color="#303f9f" />
             </Picker>
             <View style={styles.btnContainer}>
-              <Button title="Route Info" disabled={toLocation.set} />
+              <Button title="Start Route" disabled={toLocation.set} />
             </View>
           </View>
         </View>

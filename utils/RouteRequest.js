@@ -2,17 +2,20 @@ export const getRoute = async (from, to) => {
   let routes = [];
   //fetches route with 'avoid-cobbles' profile
   const response1 = await fetch(
-    `http://18.202.213.52:3000/brouter?lonlats=${from.longitude},${from.latitude}|${to.longitude},${to.latitude}&profile=avoid-cobbles&alternativeidx=0&format=geojson`
+    // `http://18.202.213.52:3000/brouter?lonlats=${from.longitude},${from.latitude}|${to.longitude},${to.latitude}&profile=avoid-cobbles&alternativeidx=0&format=geojson`
+    `http://86.6.75.164:3000/brouter?lonlats=${from.longitude},${from.latitude}|${to.longitude},${to.latitude}&profile=avoid-cobbles&alternativeidx=0&format=geojson`
   );
   const route1 = await response1.json();
   //fetches route with 'safety' profile
   const response2 = await fetch(
-    `http://18.202.213.52:3000/brouter?lonlats=${from.longitude},${from.latitude}|${to.longitude},${to.latitude}&profile=safety&alternativeidx=0&format=geojson`
+    // `http://18.202.213.52:3000/brouter?lonlats=${from.longitude},${from.latitude}|${to.longitude},${to.latitude}&profile=safety&alternativeidx=0&format=geojson`
+    `http://86.6.75.164:3000/brouter?lonlats=${from.longitude},${from.latitude}|${to.longitude},${to.latitude}&profile=safety&alternativeidx=0&format=geojson`
   );
   const route2 = await response2.json();
   //fetches route with 'shortest' profile
   const response3 = await fetch(
-    `http://18.202.213.52:3000/brouter?lonlats=${from.longitude},${from.latitude}|${to.longitude},${to.latitude}&profile=shortest&alternativeidx=0&format=geojson`
+    // `http://18.202.213.52:3000/brouter?lonlats=${from.longitude},${from.latitude}|${to.longitude},${to.latitude}&profile=shortest&alternativeidx=0&format=geojson`
+    `http://86.6.75.164:3000/brouter?lonlats=${from.longitude},${from.latitude}|${to.longitude},${to.latitude}&profile=shortest&alternativeidx=0&format=geojson`
   );
   const route3 = await response3.json();
 

@@ -19,7 +19,7 @@ export default function RouteInfo({
 }) {
   // bottomShelf variables
   const bottomSheetRef = useRef(null);
-  const snapPoints = useMemo(() => ["10%", "60%"], []);
+  const snapPoints = useMemo(() => ["40%"], []);
 
   const handlePress = () => {
     setLocacationInputActive(true);
@@ -35,28 +35,66 @@ export default function RouteInfo({
       >
         <View style={styles.container}>
           <Text style={styles.smallText}>Elevation Graph</Text>
-          <VictoryChart theme={VictoryTheme.material}>
-            <VictoryLine
-              style={{
-                data: { stroke: color },
-                parent: { border: "1px solid #ccc" },
+          <View style={styles.graphContainer}>
+            <VictoryChart
+              theme={VictoryTheme.material}
+              height={180}
+              animate={{
+                duration: 2000,
+                onLoad: { duration: 1000 },
               }}
-              data={route.elevDist}
-            />
-          </VictoryChart>
-          <Text style={styles.smallText}>
-            {"Time: " + secondsToHms(route.time)}
-          </Text>
-          <Text style={styles.smallText}>
-            {"Distance: " + Math.round(route.distance / 100) / 10 + " km"}
-          </Text>
-        </View>
-        <View style={styles.backBtnParent}>
-          <TouchableOpacity onPress={handlePress}>
-            <AntDesign name="leftcircleo" size={28} color="#e1e1e1" />
-          </TouchableOpacity>
+              padding={{ top: 25, bottom: 50, left: 50, right: 40 }}
+            >
+              <VictoryLabel
+                text="Elevation (m)"
+                x={10}
+                y={75}
+                angle={270}
+                textAnchor="middle"
+                style={{ fill: "#e1e1e1" }}
+              />
+              <VictoryLabel
+                text="Distance (km)"
+                x={185}
+                y={165}
+                textAnchor="middle"
+                style={{ fill: "#e1e1e1" }}
+              />
+              <VictoryLine
+                style={{
+                  data: { stroke: color },
+                  parent: { border: "1px solid #ccc" },
+                }}
+                data={route.elevDist}
+              />
+            </VictoryChart>
+          </View>
+          <View
+            style={{
+              margin: 40,
+              padding: 10,
+              borderTopWidth: 2,
+              borderTopColor: "#515151",
+              width: "90%",
+              alignItems: "center",
+            }}
+          >
+            <Text style={styles.smallText}>
+              {"Total Time: " + secondsToHms(route.time)}
+            </Text>
+            <Text style={styles.smallText}>
+              {"Total Distance: " +
+                Math.round(route.distance / 100) / 10 +
+                " km"}
+            </Text>
+          </View>
         </View>
       </BottomSheet>
+      <View style={styles.backBtnParent}>
+        <TouchableOpacity onPress={handlePress}>
+          <AntDesign name="leftcircleo" size={32} color="#e1e1e1" />
+        </TouchableOpacity>
+      </View>
     </>
   );
 }
@@ -76,14 +114,18 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: "column",
     alignItems: "center",
-    padding: 20,
+    justifyContent: "center",
+    paddingBottom: 0,
     paddingTop: 0,
+  },
+  graphContainer: {
+    flex: 1,
+    paddingLeft: 30,
   },
   smallText: {
     fontSize: 15,
     fontWeight: "bold",
-    color: "#b1b1b1",
-    marginTop: 5,
+    color: "#e1e1e1",
   },
   backgroundCol: {
     backgroundColor: "#222222",
@@ -94,7 +136,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     position: "absolute",
-    top: 0,
-    left: 20,
+    top: 50,
+    left: 15,
   },
 });
